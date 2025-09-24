@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device--width, initial-scale=1.0">
+    <title>Dora-ta-no Sub - Future 9000</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glow-color: #00ffff;
+            --primary-color: #0d1a2d;
+            --secondary-color: #1a3a5f;
+            --accent-color: #00d4ff;
+        }
+
+        body {
+            background-color: var(--primary-color);
+            color: #e0f7ff;
+            font-family: 'Roboto', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .font-orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        /* --- New Interactive 3D Card Styles --- */
+        .hero-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #05080f;
+            perspective: 1000px;
+        }
+
+        .interactive-card {
+            width: 90vw;
+            max-width: 800px;
+            height: 60vh;
+            max-height: 500px;
+            position: relative;
+            border-radius: 1.5rem;
+            background: #1a2a45;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
+            border: 1px solid var(--accent-color);
+        }
+
+        .card-layer {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.2s ease-out;
+        }
+        
+        .card-layer img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .card-content {
+            transform: translateZ(120px); /* Bring text forward */
+            text-shadow: 0 0 10px var(--glow-color), 0 0 20px var(--glow-color), 0 0 40px rgba(0, 255, 255, 0.5);
+        }
+        
+        .card-background {
+            transform: translateZ(0px);
+        }
+        .card-midground {
+            transform: translateZ(50px);
+        }
+        .card-foreground {
+            transform: translateZ(100px);
+        }
+        
+        .card-glare {
+            position: absolute;
+            inset: 0;
+            border-radius: 1.5rem;
+            background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.2), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.2s ease-out;
+            pointer-events: none;
+        }
+        /* --- End of 3D Card Styles --- */
+
+        .text-glow {
+            text-shadow: 0 0 5px var(--glow-color), 0 0 10px var(--glow-color);
+        }
+
+        .section {
+            padding: 8rem 1rem;
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+            background-color: var(--primary-color);
+        }
+        
+        .section-bg-gfx {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 150%;
+            height: 150%;
+            transform: translate(-50%, -50%);
+            background-image: radial-gradient(circle, rgba(26, 58, 95, 0.3) 0%, transparent 60%);
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        .card {
+            background: rgba(13, 26, 45, 0.6);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.15) 0%, transparent 40%);
+            transform-origin: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .card:hover:before {
+            opacity: 1;
+            animation: rotate 6s linear infinite;
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+            border-color: rgba(0, 212, 255, 0.5);
+        }
+        
+        .film-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .film-card {
+            aspect-ratio: 2 / 3;
+            background-size: cover;
+            background-position: center;
+            border-radius: 0.75rem;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+            padding: 1rem;
+            transition: transform 0.3s ease;
+        }
+        .film-card:hover {
+             transform: scale(1.05);
+        }
+
+        .film-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 50%);
+        }
+        
+        .film-title {
+            position: relative;
+            z-index: 2;
+            color: white;
+            font-weight: bold;
+            transform: translateY(100%);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .film-card:hover .film-title {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .animated-element {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1s cubic-bezier(0.165, 0.84, 0.44, 1), transform 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        
+        .animated-element.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .nav-link {
+            position: relative;
+            color: #e0f7ff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--accent-color);
+            transform-origin: bottom right;
+            transition: transform 0.3s cubic-bezier(0.86, 0, 0.07, 1);
+        }
+        .nav-link:hover {
+            color: var(--accent-color);
+        }
+        .nav-link:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+        
+        #mobile-menu-container {
+            perspective: 1000px;
+        }
+
+        #mobile-menu {
+            opacity: 0;
+            transform: scale(0.95);
+            transform-style: preserve-3d;
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+            pointer-events: none;
+        }
+        
+        #mobile-menu.menu-open {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+
+        #mobile-menu a {
+            opacity: 0;
+            transform: rotateX(-90deg);
+            transform-origin: top center;
+            transition: opacity 0.4s cubic-bezier(0.23, 1, 0.32, 1), transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        
+        #mobile-menu.menu-open a {
+            opacity: 1;
+            transform: rotateX(0deg);
+        }
+        
+        #mobile-menu.menu-open a:nth-child(1) { transition-delay: 0.1s; }
+        #mobile-menu.menu-open a:nth-child(2) { transition-delay: 0.2s; }
+        #mobile-menu.menu-open a:nth-child(3) { transition-delay: 0.3s; }
+        #mobile-menu.menu-open a:nth-child(4) { transition-delay: 0.4s; }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .indonesia-gold {
+            background: linear-gradient(45deg, #ff0000, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 p-4 bg-primary-color/30 backdrop-blur-md border-b border-accent-color/20">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-orbitron font-bold text-glow">Dora-ta-no Sub</h1>
+            <nav class="hidden md:flex space-x-8 text-lg">
+                <a href="#about" class="nav-link">About</a>
+                <a href="#films" class="nav-link">Films</a>
+                <a href="#releases" class="nav-link">Releases</a>
+                <a href="#importance" class="nav-link">Our Mission</a>
+            </nav>
+            <button id="mobile-menu-button" class="md:hidden text-3xl z-10 relative">
+                &#9776;
+            </button>
+        </div>
+        <div id="mobile-menu-container" class="md:hidden">
+            <div id="mobile-menu" class="absolute top-full left-0 right-0 bg-primary-color/90 backdrop-blur-md mt-2 rounded-lg mx-4">
+                <a href="#about" class="block text-center py-4 text-lg nav-link">About</a>
+                <a href="#films" class="block text-center py-4 text-lg nav-link">Films</a>
+                <a href="#releases" class="block text-center py-4 text-lg nav-link">Releases</a>
+                <a href="#importance" class="block text-center py-4 text-lg nav-link">Our Mission</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- New Interactive 3D Card Hero Section -->
+    <div class="hero-container">
+        <div id="interactive-card" class="interactive-card">
+            <!-- Background Layer -->
+            <div class="card-layer card-background">
+                <img src="https://i.postimg.cc/tgqCLx3S/AIRetouch-20250923-204419961.png" alt="Future Earth background layer">
+            </div>
+            <!-- Midground Layer -->
+            <div class="card-layer card-midground">
+                 <img src="https://i.postimg.cc/qRgB7HZ2/AIRetouch-20250923-204435054.png" alt="Future Earth with floating cities midground layer">
+            </div>
+             <!-- Foreground Layer -->
+            <div class="card-layer card-foreground">
+                 <img src="https://i.postimg.cc/mrm2RgVb/AIRetouch-20250923-204453442.png" alt="Spaceships and stations foreground layer">
+            </div>
+            <!-- Text Content Layer -->
+            <div class="card-layer card-content text-center">
+                <div>
+                     <h2 class="text-5xl md:text-7xl font-orbitron font-black uppercase tracking-widest">Dora-ta-no Sub</h2>
+                     <p class="mt-4 text-xl md:text-2xl font-light text-accent-color">Translating the Future of Anime</p>
+                </div>
+            </div>
+            <!-- Glare Effect Layer -->
+            <div class="card-layer card-glare"></div>
+        </div>
+    </div>
+    
+    <main>
+        <!-- The rest of your content starts here -->
+        <!-- About Section -->
+        <section id="about" class="section">
+            <div class="section-bg-gfx"></div>
+            <div class="container mx-auto max-w-5xl text-center">
+                <div class="animated-element">
+                    <h2 class="text-4xl md:text-5xl font-orbitron font-bold mb-8 text-glow">Our Story</h2>
+                </div>
+                <div class="card p-8 md:p-12 text-left space-y-6 animated-element" style="transition-delay: 0.2s;">
+                    <p class="text-lg leading-relaxed">Our story begins in 2021. We are a team from Indonesia who love Japanese anime and manga. On January 15, 2021, we decided to create a translation community so that people who don't understand certain languages can understand and be understood. We aim to improve your language abilities, and we translate it too.</p>
+                    <p class="text-lg leading-relaxed">At the beginning, we thought this method would not work. That year, our subscribers were still under 100. When we uploaded our first video on October 12, 2022, the audience was only 50 viewers. After research, we realized our translation of Doraemon Series Episode 542 was a big mistake. We had too many languages and decided to focus only on Japanese to Indonesian.</p>
+                    <p class="text-lg leading-relaxed">After a break of 3 months and 17 days, we re-uploaded other series episodes like 549 and 550. The 550 series became the most searched for, and by 2023, it reached our first 30,000 viewers! Finally, we started to be known on various platforms like YouTube, Bilibili, RuTube, Vimeo, and more.</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8 mt-12 text-left">
+                    <div class="card p-8 animated-element" style="transition-delay: 0.4s;">
+                        <h3 class="font-orbitron text-2xl font-bold mb-4 text-accent-color">Channel Information</h3>
+                        <div class="flex justify-center my-4">
+                           <iframe height="80px" width="300px" frameborder="0" src="https://livecounts.io/embed/youtube-live-subscriber-counter/UC96kKn3hhOmBFVQ7c0L4h4g" style="border: 0; width:300px; height:80px; background: rgba(255,255,255,0.1); border-radius: 8px;"></iframe>
+                        </div>
+                        <div class="text-center my-6">
+                            <a href="https://youtube.com/@dorata-nosub" target="_blank" rel="noopener noreferrer" class="inline-block bg-accent-color text-primary-color font-bold py-3 px-8 rounded-full hover:bg-white transition-colors text-lg">
+                                Kunjungi Channel YouTube
+                            </a>
+                        </div>
+                        <p>This channel provides the Doraemon anime with subtitles in languages: Arabic, Bengali, Indonesian, Malaysian, Japanese, Chinese etc. If we don't upload for a week or a month, chances are we're busy.</p>
+                        <p class="mt-4 text-sm opacity-80">All content on this channel is completely owned by TV Asahi Corporation. I do not have any rights to the videos that I upload. If I violate copyright, contact me immediately and I will remove it as soon as possible.</p>
+                    </div>
+                    <div class="card p-8 animated-element" style="transition-delay: 0.6s;">
+                        <h3 class="font-orbitron text-2xl font-bold mb-4 text-accent-color">Vision & Mission</h3>
+                        <p><strong class="text-white">Vision:</strong> We hope that Dora-ta-no Sub can last forever and can continue to entertain the audience so that it remains environmentally friendly.</p>
+                        <p class="mt-4"><strong class="text-white">Mission:</strong> Building a Subtitle playground with the aim of improving translation accuracy and having fun together. Please help Dora-ta-no Lovers continue to support and encourage us!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Film Grid -->
+        <section id="films" class="section bg-secondary-color">
+             <div class="section-bg-gfx" style="background-image: radial-gradient(circle, rgba(13, 26, 45, 0.5) 0%, transparent 60%);"></div>
+            <div class="container mx-auto max-w-7xl text-center">
+                <div class="animated-element">
+                    <h2 class="text-4xl md:text-5xl font-orbitron font-bold mb-8 text-glow">Translated Films</h2>
+                    <p class="text-lg mb-12 max-w-3xl mx-auto">A collection of 26 Doraemon films, carefully translated for our global audience. Each one is a journey into the world of dreams and adventure.</p>
+                </div>
+                <div class="film-grid animated-element" style="transition-delay: 0.2s;">
+                    <!-- Generating 26 film cards -->
+                    <script>
+                        const filmGrid = document.querySelector('.film-grid');
+                        for (let i = 1; i <= 26; i++) {
+                            const filmCard = document.createElement('div');
+                            filmCard.className = 'film-card card';
+                            filmCard.style.backgroundImage = `url('https://placehold.co/400x600/1a3a5f/00d4ff?text=Film+${i}')`;
+                            
+                            const filmTitle = document.createElement('h3');
+                            filmTitle.className = 'film-title';
+                            filmTitle.textContent = `Doraemon Film ${i}`;
+                            
+                            filmCard.appendChild(filmTitle);
+                            if (filmGrid) filmGrid.appendChild(filmCard);
+                        }
+                    </script>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Releases & More -->
+        <section id="releases" class="section">
+             <div class="section-bg-gfx"></div>
+            <div class="container mx-auto max-w-6xl text-center">
+                 <div class="animated-element">
+                    <h2 class="text-4xl md:text-5xl font-orbitron font-bold mb-12 text-glow">Channel Updates</h2>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="card p-8 animated-element" style="transition-delay: 0.2s;">
+                        <h3 class="font-orbitron text-2xl font-bold mb-4 text-accent-color">Latest Episode Release</h3>
+                        <img src="https://placehold.co/600x400/0d1a2d/00ffff?text=New+Episode" alt="New Episode Thumbnail" class="rounded-lg my-4">
+                        <p class="font-bold text-lg">Doraemon Series: Episode 600</p>
+                        <a href="#" class="mt-6 inline-block bg-accent-color text-primary-color font-bold py-2 px-6 rounded-full hover:bg-white transition-colors">Watch Now</a>
+                    </div>
+                    <div class="card p-8 animated-element" style="transition-delay: 0.4s;">
+                        <h3 class="font-orbitron text-2xl font-bold mb-4 text-accent-color">Upcoming Video</h3>
+                        <img src="https://placehold.co/600x400/0d1a2d/00ffff?text=Upcoming+Trailer" alt="Upcoming Trailer Thumbnail" class="rounded-lg my-4">
+                        <p class="font-bold text-lg">Movie Special Trailer</p>
+                        <a href="#" class="mt-6 inline-block bg-gray-600 text-white font-bold py-2 px-6 rounded-full cursor-not-allowed">Coming Soon</a>
+                    </div>
+                    <div class="card p-8 animated-element" style="transition-delay: 0.6s;">
+                        <h3 class="font-orbitron text-2xl font-bold mb-4 text-accent-color">Fan Favorite</h3>
+                        <img src="https://placehold.co/600x400/0d1a2d/00ffff?text=Episode+550" alt="Episode 550 Thumbnail" class="rounded-lg my-4">
+                        <p class="font-bold text-lg">Doraemon Series: Episode 550</p>
+                        <a href="#" class="mt-6 inline-block bg-accent-color text-primary-color font-bold py-2 px-6 rounded-full hover:bg-white transition-colors">Re-Watch</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="importance" class="section bg-secondary-color">
+            <div class="section-bg-gfx"></div>
+            <div class="container mx-auto max-w-5xl text-center">
+                <div class="animated-element">
+                    <h2 class="text-4xl md:text-5xl font-orbitron font-bold mb-8 text-glow">Why Fansubbers Matter</h2>
+                </div>
+                <div class="card p-8 md:p-12 text-left space-y-6 animated-element" style="transition-delay: 0.2s;">
+                    <p class="text-lg leading-relaxed">The Dora-ta-no Sub Channel and other fansubbers are vital to the global Doraemon community. We act as a cultural bridge, making beloved series accessible to fans who don't speak Japanese. Official subtitles are not always available, especially for older episodes. Fansubbers fill this gap, ensuring that the magic of Doraemon can be enjoyed by everyone, regardless of their native language.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="indonesia-gold" class="section">
+            <div class="section-bg-gfx"></div>
+            <div class="container mx-auto max-w-4xl text-center">
+                 <div class="animated-element">
+                    <h2 class="text-4xl md:text-5xl font-orbitron font-bold mb-8 indonesia-gold">MAKE INDONESIA GOLD IN 2045</h2>
+                </div>
+                <div class="card p-8 md:p-12 animated-element" style="transition-delay: 0.2s;">
+                    <p class="text-lg leading-relaxed">For the Indonesian population, we hope our country will be free from poverty by supporting the people around you. Our team aims to make the Indonesian nation proud one day so that Indonesia and other countries can coexist. Come on, we must continue to develop and show that we are the real sleeping Asian tigers, who are very accomplished and dedicated.</p>
+                    <p class="text-5xl font-orbitron mt-8 tracking-widest">INDEPENDENT!!!!</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="bg-secondary-color py-8 border-t border-accent-color/20 relative z-10">
+        <div class="container mx-auto text-center text-gray-400">
+            <p>&copy; 2024 Dora-ta-no Sub. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Interactive 3D Card Logic ---
+        const card = document.getElementById('interactive-card');
+        if (card) {
+            const layers = card.querySelectorAll('.card-layer');
+            const glare = card.querySelector('.card-glare');
+
+            card.addEventListener('mousemove', (e) => {
+                const { top, left, width, height } = card.getBoundingClientRect();
+                const x = e.clientX - left;
+                const y = e.clientY - top;
+                
+                const rotateX = ((y / height) - 0.5) * -15; // Invert for natural feel, reduce intensity
+                const rotateY = ((x / width) - 0.5) * 15; // Reduce intensity
+
+                card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+
+                // Move layers
+                layers.forEach(layer => {
+                    let speed = 20; // Default speed
+                    if(layer.classList.contains('card-midground')) speed = 40;
+                    if(layer.classList.contains('card-foreground')) speed = 60;
+                    if(layer.classList.contains('card-content')) speed = 80;
+                    
+                    const moveX = ((x / width) - 0.5) * speed;
+                    const moveY = ((y / height) - 0.5) * speed;
+
+                    if(layer !== glare) {
+                       layer.style.transform = `translateX(${moveX}px) translateY(${moveY}px)`;
+                    }
+                });
+                
+                // Update glare effect
+                glare.style.opacity = '1';
+                glare.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255, 255, 255, 0.2), transparent 70%)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'rotateX(0deg) rotateY(0deg)';
+                layers.forEach(layer => {
+                    layer.style.transform = `translateX(0px) translateY(0px)`;
+                });
+                glare.style.opacity = '0';
+            });
+        }
+    
+        // --- Mobile Menu ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('menu-open');
+            });
+        }
+
+        // --- Scroll Animations for content ---
+        const animatedElements = document.querySelectorAll('.animated-element');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                } 
+                else {
+                    entry.target.classList.remove('visible');
+                }
+            });
+        }, {
+            threshold: 0.1 
+        });
+
+        animatedElements.forEach(el => {
+            observer.observe(el);
+        });
+
+        // --- Smooth Scrolling for Nav Links ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    const headerOffset = document.querySelector('header').offsetHeight;
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                         top: offsetPosition,
+                         behavior: "smooth"
+                    });
+                }
+                if (mobileMenu && mobileMenu.classList.contains('menu-open')) {
+                    mobileMenu.classList.remove('menu-open');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
+
