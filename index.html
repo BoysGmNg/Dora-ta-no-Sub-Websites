@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device--width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dora-ta-no Sub - Future 9000</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -311,15 +311,15 @@
         <div id="interactive-card" class="interactive-card">
             <!-- Background Layer -->
             <div class="card-layer card-background">
-                <img src="https://i.postimg.cc/tgqCLx3S/AIRetouch-20250923-204419961.png" alt="Future Earth background layer">
+                <img src="https://pixeldrain.com/api/file/ouY88ppZ" alt="Future Earth background layer" onerror="this.onerror=null;this.src='https://placehold.co/800x500/05080f/1a2a45?text=BG+Error';">
             </div>
             <!-- Midground Layer -->
             <div class="card-layer card-midground">
-                 <img src="https://i.postimg.cc/qRgB7HZ2/AIRetouch-20250923-204435054.png" alt="Future Earth with floating cities midground layer">
+                 <img src="https://pixeldrain.com/api/file/x9bR6y64" alt="Future Earth with floating cities midground layer" onerror="this.onerror=null;this.src='https://placehold.co/800x500/05080f/1a2a45?text=MG+Error';">
             </div>
              <!-- Foreground Layer -->
             <div class="card-layer card-foreground">
-                 <img src="https://i.postimg.cc/mrm2RgVb/AIRetouch-20250923-204453442.png" alt="Spaceships and stations foreground layer">
+                 <img src="https://pixeldrain.com/api/file/1RMP1WLA" alt="Spaceships and stations foreground layer" onerror="this.onerror=null;this.src='https://placehold.co/800x500/05080f/1a2a45?text=FG+Error';">
             </div>
             <!-- Text Content Layer -->
             <div class="card-layer card-content text-center">
@@ -380,21 +380,7 @@
                 </div>
                 <div class="film-grid animated-element" style="transition-delay: 0.2s;">
                     <!-- Generating 26 film cards -->
-                    <script>
-                        const filmGrid = document.querySelector('.film-grid');
-                        for (let i = 1; i <= 26; i++) {
-                            const filmCard = document.createElement('div');
-                            filmCard.className = 'film-card card';
-                            filmCard.style.backgroundImage = `url('https://placehold.co/400x600/1a3a5f/00d4ff?text=Film+${i}')`;
-                            
-                            const filmTitle = document.createElement('h3');
-                            filmTitle.className = 'film-title';
-                            filmTitle.textContent = `Doraemon Film ${i}`;
-                            
-                            filmCard.appendChild(filmTitle);
-                            if (filmGrid) filmGrid.appendChild(filmCard);
-                        }
-                    </script>
+                    
                 </div>
             </div>
         </section>
@@ -449,7 +435,7 @@
                 </div>
                 <div class="card p-8 md:p-12 animated-element" style="transition-delay: 0.2s;">
                     <p class="text-lg leading-relaxed">For the Indonesian population, we hope our country will be free from poverty by supporting the people around you. Our team aims to make the Indonesian nation proud one day so that Indonesia and other countries can coexist. Come on, we must continue to develop and show that we are the real sleeping Asian tigers, who are very accomplished and dedicated.</p>
-                    <p class="text-5xl font-orbitron mt-8 tracking-widest">INDEPENDENT!!!!</p>
+                    <p class="text-5xl font-orbitron mt-8 tracking-widest">MERDEKA!!!!</p>
                 </div>
             </div>
         </section>
@@ -462,99 +448,120 @@
     </footer>
 
     <script>
-        // --- Interactive 3D Card Logic ---
-        const card = document.getElementById('interactive-card');
-        if (card) {
-            const layers = card.querySelectorAll('.card-layer');
-            const glare = card.querySelector('.card-glare');
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Interactive 3D Card Logic ---
+            const card = document.getElementById('interactive-card');
+            if (card) {
+                const layers = card.querySelectorAll('.card-layer');
+                const glare = card.querySelector('.card-glare');
 
-            card.addEventListener('mousemove', (e) => {
-                const { top, left, width, height } = card.getBoundingClientRect();
-                const x = e.clientX - left;
-                const y = e.clientY - top;
-                
-                const rotateX = ((y / height) - 0.5) * -15; // Invert for natural feel, reduce intensity
-                const rotateY = ((x / width) - 0.5) * 15; // Reduce intensity
-
-                card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-
-                // Move layers
-                layers.forEach(layer => {
-                    let speed = 20; // Default speed
-                    if(layer.classList.contains('card-midground')) speed = 40;
-                    if(layer.classList.contains('card-foreground')) speed = 60;
-                    if(layer.classList.contains('card-content')) speed = 80;
+                card.addEventListener('mousemove', (e) => {
+                    const { top, left, width, height } = card.getBoundingClientRect();
+                    const x = e.clientX - left;
+                    const y = e.clientY - top;
                     
-                    const moveX = ((x / width) - 0.5) * speed;
-                    const moveY = ((y / height) - 0.5) * speed;
+                    const rotateX = ((y / height) - 0.5) * -15; // Invert for natural feel, reduce intensity
+                    const rotateY = ((x / width) - 0.5) * 15; // Reduce intensity
 
-                    if(layer !== glare) {
-                       layer.style.transform = `translateX(${moveX}px) translateY(${moveY}px)`;
+                    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+
+                    // Move layers
+                    layers.forEach(layer => {
+                        let speed = 20; // Default speed
+                        if(layer.classList.contains('card-midground')) speed = 40;
+                        if(layer.classList.contains('card-foreground')) speed = 60;
+                        if(layer.classList.contains('card-content')) speed = 80;
+                        
+                        const moveX = ((x / width) - 0.5) * speed;
+                        const moveY = ((y / height) - 0.5) * speed;
+
+                        if(layer !== glare) {
+                           layer.style.transform = `translateX(${moveX}px) translateY(${moveY}px)`;
+                        }
+                    });
+                    
+                    // Update glare effect
+                    glare.style.opacity = '1';
+                    glare.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255, 255, 255, 0.2), transparent 70%)`;
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'rotateX(0deg) rotateY(0deg)';
+                    layers.forEach(layer => {
+                        layer.style.transform = `translateX(0px) translateY(0px)`;
+                    });
+                    glare.style.opacity = '0';
+                });
+            }
+        
+            // --- Mobile Menu ---
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('menu-open');
+                });
+            }
+
+            // --- Scroll Animations for content ---
+            const animatedElements = document.querySelectorAll('.animated-element');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    } 
+                    else {
+                        // Optional: remove class to re-animate on scroll up
+                        // entry.target.classList.remove('visible');
                     }
                 });
-                
-                // Update glare effect
-                glare.style.opacity = '1';
-                glare.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255, 255, 255, 0.2), transparent 70%)`;
+            }, {
+                threshold: 0.1 
             });
 
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'rotateX(0deg) rotateY(0deg)';
-                layers.forEach(layer => {
-                    layer.style.transform = `translateX(0px) translateY(0px)`;
+            animatedElements.forEach(el => {
+                observer.observe(el);
+            });
+
+            // --- Smooth Scrolling for Nav Links ---
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        const header = document.querySelector('header');
+                        const headerOffset = header ? header.offsetHeight : 70;
+                        const elementPosition = targetElement.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                        window.scrollTo({
+                             top: offsetPosition,
+                             behavior: "smooth"
+                        });
+                    }
+                    if (mobileMenu && mobileMenu.classList.contains('menu-open')) {
+                        mobileMenu.classList.remove('menu-open');
+                    }
                 });
-                glare.style.opacity = '0';
             });
-        }
-    
-        // --- Mobile Menu ---
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        if (mobileMenuButton && mobileMenu) {
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('menu-open');
-            });
-        }
 
-        // --- Scroll Animations for content ---
-        const animatedElements = document.querySelectorAll('.animated-element');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                } 
-                else {
-                    entry.target.classList.remove('visible');
+            // --- Film Grid Generation ---
+            const filmGrid = document.querySelector('.film-grid');
+            if(filmGrid){
+                for (let i = 1; i <= 26; i++) {
+                    const filmCard = document.createElement('div');
+                    filmCard.className = 'film-card card';
+                    filmCard.style.backgroundImage = `url('https://placehold.co/400x600/1a3a5f/00d4ff?text=Film+${i}')`;
+                    
+                    const filmTitle = document.createElement('h3');
+                    filmTitle.className = 'film-title';
+                    filmTitle.textContent = `Doraemon Film ${i}`;
+                    
+                    filmCard.appendChild(filmTitle);
+                    filmGrid.appendChild(filmCard);
                 }
-            });
-        }, {
-            threshold: 0.1 
-        });
-
-        animatedElements.forEach(el => {
-            observer.observe(el);
-        });
-
-        // --- Smooth Scrolling for Nav Links ---
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    const headerOffset = document.querySelector('header').offsetHeight;
-                    const elementPosition = targetElement.getBoundingClientRect().top;
-                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-                    window.scrollTo({
-                         top: offsetPosition,
-                         behavior: "smooth"
-                    });
-                }
-                if (mobileMenu && mobileMenu.classList.contains('menu-open')) {
-                    mobileMenu.classList.remove('menu-open');
-                }
-            });
+            }
         });
     </script>
 </body>
